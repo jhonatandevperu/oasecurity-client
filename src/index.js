@@ -48,25 +48,21 @@ app.get("/", async (req, res) => {
 
 app.get("/privado", (req, res) => {
   try {
-    const bearerHeader = req.headers["authorization"];
     const { userCookie } = req.signedCookies;
-    if (userCookie && !bearerHeader) {
+    if (userCookie) {
       return res.render("index", {
         usuario: userCookie,
       });
-    } else {
-      if (bearerHeader) {
-        const bearer = bearerHeader.split(" ");
-        const bearerToken = bearer[1];
-        let usuario = jsonWebTokenConfig.verify(bearerToken);
-        res.cookie("userCookie", usuario, cookieOptions);
-        return res.status(200).end();
-      }
-      return res.render("error");
     }
+    if (req.query.token) {
+      let usuario = jsonWebTokenConfig.verify(req.query.token);
+      res.cookie("userCookie", usuario, cookieOptions);
+      return res.redirect("/privado");
+    }
+    return res.render("error");
   } catch (error) {
     console.error(error);
-    res.status(400).end();
+    return res.render("error");
   }
 });
 
