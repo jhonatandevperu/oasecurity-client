@@ -1,0 +1,12 @@
+<div class=" jumbotron">
+    <h1 class="display-3">Pagina Inicial</h1>
+    <p class="lead">Hola {{usuario.nombres}} {{usuario.apellidos}}</p>
+    <hr class="my-4">
+    <code>
+        {{#objToList usuario}}
+        {{/objToList}}
+    </code>
+    <p class="lead mt-4">
+        <a class="btn btn-primary btn-lg" href="/logout" role="button">Cerrar Sesión </a>
+    </p>
+</div>
