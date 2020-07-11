@@ -48,13 +48,13 @@ app.get("/", async (req, res) => {
 
 app.get("/privado", (req, res) => {
   try {
+    const bearerHeader = req.headers["authorization"];
     const { userCookie } = req.signedCookies;
-    if (userCookie) {
+    if (userCookie && !bearerHeader) {
       return res.render("index", {
         usuario: userCookie,
       });
     } else {
-      const bearerHeader = req.headers["authorization"];
       if (bearerHeader) {
         const bearer = bearerHeader.split(" ");
         const bearerToken = bearer[1];
